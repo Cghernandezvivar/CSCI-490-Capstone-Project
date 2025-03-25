@@ -6,6 +6,9 @@ import Login from './Login';
 import Profile from './Profile';
 import PostRecipe from './PostRecipe';
 import PostedRecipe from './PostedRecipe';
+import Recipe from './Recipe';
+import Messages from './Messages';
+import MessageRoom from './MessageRoom';
 import './App.css';
 
 function App() {
@@ -21,6 +24,9 @@ function App() {
 		  <Route path="/Profile" element={<Profile />} />
 		  <Route path="/PostRecipe" element={<PostRecipe />} />
 		  <Route path="/PostedRecipe" element={<PostedRecipe />} />
+		  <Route path="/Recipe/:id" element={<Recipe />} />
+		  <Route path="/Messages" element={<Messages />} />
+		  <Route path="/MessageRoom/:userId" element={<MessageRoom />} />
 		  </Routes>
 		  </Router>
 		    );

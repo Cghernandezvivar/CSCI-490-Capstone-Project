@@ -1,7 +1,7 @@
 import React from 'react';
-import app from "./firebaseConfig";
 import { Link } from 'react-router-dom';
-import { Grid, Button } from "@mui/material";
+import { Grid, Button } from '@mui/material';
+import app from "./firebaseConfig";
 import logo from './Cover.jpeg';
 
 
@@ -19,11 +19,8 @@ function Home() {
 			margin: "0",
 		      }}
 		>
-		<Grid
-		container
-		spacing={2}
-		alignItems="center"
-		>
+
+		<Grid container spacing={2} alignItems="center">
 
 		{/*Left Side*/}
 		<Grid
@@ -43,14 +40,14 @@ function Home() {
 
 		<h1
 		style={{
-		marginBottom: "20px",
-		fontWeight: "bold",
-		fontSize: "3.5rem",
-		textAlign: "center",
-		width: "100%",
-		}}
+			marginBottom: "20px",
+			fontWeight: "bold",
+			fontSize: "3.5rem",
+			textAlign: "center",
+			width: "100%",
+		      }}
 		>
-		Welcome to my Online Cookbook
+		 Welcome to my Online Cookbook
 		</h1>
 
 		<h5
@@ -60,12 +57,13 @@ function Home() {
 			textAlign: "center",
 		      }}
 		>
-		This is an Online Cookbook
+		 This is an Online Cookbook
 		</h5>
 
 		<Grid container spacing={2} justifyContent="center">
+
 		<Grid item>
-		<Link to="/CreateAccount" style={{ textDecoration: 'none' }}>
+		<Link to="/CreateAccount" style={{ textDecoration: "none" }}>
 		<Button 
 		variant="contained" 
 		sx={{ 
@@ -76,12 +74,13 @@ function Home() {
 		   }}
 		type="submit"
 		>
-		Signup
+		 Signup
 		</Button>
 		</Link>
 		</Grid>
+
 		<Grid item>
-		<Link to="/Login" style={{ textDecoration: 'none' }}>
+		<Link to="/Login" style={{ textDecoration: "none" }}>
 		<Button
 		variant="contained"
 		sx={{
@@ -91,10 +90,11 @@ function Home() {
 			"&:hover":{backgroundColor: "#ACB4BD"}
 	           }}
 		>
-		Login
+		 Login
 		</Button>
-		 </Link>
+		</Link>
 		</Grid>
+
 		</Grid>
 		</Grid>
 
