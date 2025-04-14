@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, TextField,Container, Typography, styled, Card, CardContent } from '@mui/material';
+import { Button, TextField, Container, Typography, styled, Card, CardContent } from '@mui/material';
 import { Link } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import { db, auth } from './firebaseConfig';
@@ -32,6 +32,7 @@ function PostRecipe() {
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		setError("");
+
 	try { 
 		const docRef = await addDoc(collection(db, "recipes"), { 
 			foodname,
@@ -137,7 +138,7 @@ function PostRecipe() {
 		<Typography color="error" variant="body2" style={{ margin: "10px" }}>
 		{error}
 		</Typography>
-		)}
+		)}		
 
 		<Button
 		variant="contained"
