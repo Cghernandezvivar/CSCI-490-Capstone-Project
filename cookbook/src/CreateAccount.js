@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button, Container, TextField, Typography, Grid } from '@mui/material';
+import { Button, Container, TextField, Typography, Grid, styled, Card, CardContent } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from './firebaseConfig.js' ;
 import { doc, setDoc } from 'firebase/firestore';
@@ -36,6 +37,19 @@ export default function CreateAccount() {
 	}
 	};
 
+	const TopRightButton = styled(Button)(
+		{
+			position: "absolute",
+			top: "20px",
+			right: "20px",
+			borderRadius: "30px",
+			padding: "10px 30px",
+			backgroundColor: "#455763",
+			color: "#fff",
+			"&:hover":{backgroundColor: "#D3DADC",},
+		}
+	);
+
 	return (
 		<div className="App">
 
@@ -48,6 +62,18 @@ export default function CreateAccount() {
 			height: "100vh"
 		      }}
 		>
+		
+		<Card
+		sx={{
+			minWidth: 400,
+			width: "70%",
+			maxWidth: 500,
+			boxShadow: 3,
+			p: 2,
+			background: "#ededed"
+		   }}
+		>
+		<CardContent>
 
 		<Typography variant="h4" gutterBottom>
 		 Create your Online Cookbook Account
@@ -115,17 +141,28 @@ export default function CreateAccount() {
 		sx={{
 			borderRadius: "30px",
 			padding: "10px 30px",
-			background: "#727F91",
-			"&:hover":{backgroundColor: "#ACB4BD"}
+			background: "#455763",
+			"&:hover":{backgroundColor: "#D3DADC"}
 		   }}
 		type="submit"
 		>
-		 Next
+		 Submit
 		</Button>
 		</Grid>
 
+		<TopRightButton
+		variant="contained"
+		component={Link}
+		to="/"
+		startIcon={<ArrowBackIcon />}
+		>
+		back
+		</TopRightButton>
+
 		</Grid>
 		</form>
+		</CardContent>
+		</Card>
 		</Container>
 		</div>
 	);

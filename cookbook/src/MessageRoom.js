@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Button, TextField, Container } from '@mui/material'; 
+import { Button, TextField, Container, styled } from '@mui/material'; 
 import { useParams, Link } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { db } from './firebaseConfig';
 import { getAuth } from 'firebase/auth';
-import { collection, getDocs, addDoc, query, where,orderBy, onSnapshot } from 'firebase/firestore'; 
+import { collection, getDocs, addDoc, query, where, orderBy, onSnapshot } from 'firebase/firestore'; 
 
 function MessageRoom() {
 	const { userId } = useParams();
-	const [user, setUser] = useState(null);
-	const [message, setMessage] = useState("");
-	const [messages, setMessages] = useState([]);
+	const [user, setUser] = useState(null); // User
+	const [message, setMessage] = useState(""); // Message
+	const [messages, setMessages] = useState([]); // Messages
 	const auth = getAuth();
 	const currentUser = auth.currentUser;
 
@@ -28,7 +29,7 @@ function MessageRoom() {
 	}, [userId]);
 
 
-
+	
 	useEffect(() => {
 		const messagesRef = collection(db, "messages");
 		const q = query(
@@ -36,6 +37,7 @@ function MessageRoom() {
 			where("from", "in", [currentUser?.uid, userId]),
 			where("to", "in", [currentUser?.uid, userId]),
 			orderBy("timestamp", "asc")
+
 		);
 		const unsubscribe = onSnapshot(q, (querySnapshot) => {
 			const fetchedMessages = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -48,7 +50,7 @@ function MessageRoom() {
 	const handleMessageChange = (e) => {
 		setMessage(e.target.value);
 	};
-
+	
 	const sendMessage = async () => {
 			if (user && message.trim()) {
 			 try {
@@ -67,21 +69,41 @@ function MessageRoom() {
 			alert("Please enter a message.");
 		}
 	};
+	
+
+	const TopRightButton = styled(Button)(
+		{
+			position: "absolute",
+			top: "20px",
+			right: "20px",
+			borderRadius: "30px",
+			padding: "10px 30px",
+			backgroundColor: "#455763",
+			color: "#fff",
+			"&:hover":{backgroundColor: "#D3DADC",},
+		}
+	);
 
 	return (
 		<div className="App">
+
+		<h1>Message with {user ? user.name : "Loading..."}</h1>
+
 		<Container
 		style={{
 			display: "flex",
 			flexDirection: "column",
-			justifyContent: "center",
+			justifyContent: "flex-start",
 			alignItems: "center",
-			height: "100vh"
+			height: "100vh",
+			padding: "20px"
 		      }}
 		>
 
+		{/*
 		<h1>Message with {user ? user.name : "Loading..."}</h1>
-
+		*/}
+		
 		<div
 		style={{
 			width: "100%",
@@ -123,28 +145,24 @@ function MessageRoom() {
 		sx={{
 			borderRadius: "30px",
 			padding: "10px 30px",
-			background: "#727F91",
-			"&:hover":{backgroundColor: "#ACB4BD"}
+			background: "#455763",
+			"&:hover":{backgroundColor: "#D3DADC"}
 		   }}
 		onClick={sendMessage}
 		>
 		 Send Message
 		</Button>
 
-		<Link to="/Messages" style={{ textDecoration: "none" }}>
-		<Button
+		<TopRightButton
 		variant="contained"
-		sx={{
-			borderRadius: "30px",
-			padding: "10px 30px",
-			background: "#727F91",
-			"&:hover":{backgroundColor: "#ACB4BD"}
-		}}
-		type="submit"
+		component={Link}
+		to="/Messages"
+		startIcon={<ArrowBackIcon />}
 		>
-		 Messages
-		</Button>
-		</Link>
+		 back
+		</TopRightButton>
+
+
 		</form>
 		</Container>
 		</div>

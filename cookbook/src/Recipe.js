@@ -1,13 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { db } from './firebaseConfig';
-import { doc, getDoc } from "firebase/firestore";
+import { Button, styled, Checkbox, FormControlLabel, TextField, List, ListItem, ListItemText, Card, CardContent, Typography, Divider } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useParams, Link } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { db } from './firebaseConfig';
+import { doc, getDoc, collection, query, where, getDocs, addDoc } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 function RecipeDetail() {
-	    const { id } = useParams();
-	    const [recipe, setRecipe] = useState(null);
+	const { id } = useParams();
+	const [recipe, setRecipe] = useState(null); // Recipe
+	const [checkedIngredients, setCheckedIngredients] = useState({}); // Checked Ing. 
+	const [comments, setComments] = useState([]); // Comments
+	const [newComment, setNewComment] = useState(""); // NewComment
+	const [userName, setUserName] = useState("Anonymous"); // User Name
+
 	useEffect(() => {
+		const fetchUserName = async () => {
+			const auth = getAuth();
+			if( auth.currentUser ) {
+				const userDocRef = doc(db, "users", auth.currentUser.uid);
+				const userDoc = await getDoc(userDocRef);
+				if( userDoc.exists()) { 
+					setUserName(userDoc.data().name);
+				} else { 
+					setUserName("Anonymous");
+				}
+			}
+		};
+
 		const fetchRecipe = async () => {
 			try {
 				const docRef = doc(db, "recipes", id);
@@ -21,48 +41,183 @@ function RecipeDetail() {
 				console.error("Error fetching recipe:", error);
 			}
 		};
+
+		const fetchComments = async () => {
+			try {
+				const q = query(collection(db, "comments"), where("recipeId", "==", id));
+				const querySnapshot = await getDocs(q);
+				const commentsData = querySnapshot.docs.map(doc => doc.data());
+				setComments(commentsData);
+			} catch (error) { 
+				console.error("Error fetching comments:", error);
+			}
+		};
+		fetchUserName();
 		fetchRecipe();
+		fetchComments();
 	}, [id]);
 
-	    return (
-		    <div className="App">
-		    {recipe ? (
-			    <>
-			    <h1>{recipe.foodName}</h1>
-			    <h3>By: {recipe.userName || "Anonymous"}</h3>
-			    <h4>Ingredients:</h4>
-			    <ul>
-			    {recipe.ingredients.split("\n").map((ingredient, index) => (
-			     <li key={index}>{ingredient.trim()}</li>
-			    ))}
-			    </ul>
 
-			    <h4>Instructions:</h4>
-			    <ol>
+	const handleAddComment = async () => { 
+		if (newComment.trim() === "")
+		{
+			return;
+		}
+		try {
+			const username = userName;
+			await addDoc(collection(db, "comments"), {
+				recipeId: id,
+				comment: newComment,
+				userName: username,
+				timestamp: new Date(),
+			});
+			setComments([...comments, { comment: newComment, userName: username }]);
+			setNewComment("");
+		} catch (error) {
+			console.error("Error adding comments:", error);
+		}
+	};
+
+
+	const TopRightButton = styled(Button)(
+		{
+			position: "absolute",
+			top: "20px",
+			right: "20px",
+			borderRadius: "30px",
+			padding: "10px 30px",
+			backgroundColor: "#455763",
+			color: "#fff",
+			"&:hover":{backgroundColor: "#D3DADC",},
+		}
+	);
+	
+	const handleCheck = (index) => { 
+		setCheckedIngredients((prev) => ({
+			...prev,
+			[index]: !prev[index],
+		}));
+	};
+
+	    return (
+		    <div className="App" 
+		    style={{
+			    display: "flex",
+			    justifyContent: "center", 
+			    padding: "40px"
+		    	  }}
+		    >
+		    {recipe ? (
+			    <Card 
+			    sx={{ 
+				    maxWidth: 800,
+				    width: "100%", 
+				    boxShadow: 3,
+			            background: "#ededed"
+			    	}}
+			    >
+			    <CardContent>
+			   
+			    <Typography variant="h4" gutterBottom>
+			    {recipe.foodName}
+			    </Typography>
+
+			    <Typography variant="subtitle1" gutterBottom>
+			    By: {recipe.userName || "Anonymous"}
+			    </Typography>
+
+			    <Divider 
+			    sx={{ 
+				    marginY:2
+			    	}}
+			    />
+			    
+			    <Typography variant="h6">
+			    Ingredients:
+			    </Typography>
+
+			    <div>
+			    {recipe.ingredients.split("\n").map((ingredient, index) => (
+				    <FormControlLabel
+				    key={index}
+				    control={
+					    <Checkbox
+					    checked={!!checkedIngredients[index]}
+					    onChange={() => handleCheck(index)}
+					    />
+				    }
+				    label={ingredient.trim()}
+				    />
+			    ))}
+			    </div>
+
+			    <Divider
+			    sx={{
+				    marginY:2
+			    	}}
+			    />
+
+			    <Typography variant="h6">
+			    Instructions:
+			    </Typography>
+			    <ol
+			    style={{
+				    paddingLeft: "20px"
+			    	  }}
+			    >	
+
 			    {recipe.instructions.split("\n").map((step, index) => (
-		             <li key={index}>{step.trim()}</li>
+		             <li key={index} style={{ marginBottom: "8px" }}>
+				   <Typography> {step.trim()} </Typography>
+			     </li>
 			    ))}
 			    </ol>
 
-			    </>
+			    <Divider 
+			    sx={{
+				    marginY:2
+			    	}}
+			    />
+
+			    <Typography variant="h6">
+			    Comments: 
+			    </Typography>
+			    <List>
+			    {comments.map((comment, index) => (
+				    <ListItem key={index} alignItems="flex-start">
+				    <ListItemText primary={comment.comment} secondary={comment.userName|| "Anonymous"}/>
+				    </ListItem>
+			    ))}
+			    </List>
+
+			    <TextField
+			    label="Add a comment"
+			    variant="outlined"
+			    value={newComment}
+			    onChange={(e) => setNewComment(e.target.value)}
+			    fullWidth
+			    multiline
+			    rows={3}
+			    style={{ marinTop: 2, marginBottom: 1}}
+			    />
+			    <Button variant="contained" color="primary" onClick={handleAddComment}>
+			    Post Comment
+			    </Button>
+			   </CardContent>
+			    </Card>
+			    
 		    ) : (
 			    <p>Loading recipe details...</p>
 		    )}
 
-		    <Link to="/PostedRecipe" style={{ textDecoration: "none" }}>
-		    <Button 
-		    variant="contained" 
-		    sx={{
-			    borderRadius: "30px",
-			    padding: "10px 30px",
-	  	            background: "#727F91",
-			    "&:hover":{backgroundColor: "#ACB4BD"}
-		    }}
-		    type="submit"
+		    <TopRightButton
+		    variant="contained"
+		    component={Link}
+		    to="/PostedRecipe"
+		    startIcon={<ArrowBackIcon />}
 		    >
-		     PostedRecipe		    
-		    </Button>
-		    </Link>
+		    back
+		    </TopRightButton>
 		    </div>
 	    );
 }

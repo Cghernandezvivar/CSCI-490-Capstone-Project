@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Button, TextField, Container, Typography, Grid } from '@mui/material';
+import { Button, TextField,Container, Typography, styled, Card, CardContent } from '@mui/material';
 import { Link } from 'react-router-dom';
+import HomeIcon from '@mui/icons-material/Home';
 import { db, auth } from './firebaseConfig';
 import { collection, addDoc, doc, getDoc } from 'firebase/firestore';
 
@@ -11,12 +12,12 @@ function PostRecipe() {
 	const [userName, setUserName] = useState("Anonymous"); // Users Name
 	const [error, setError] = useState("");
 
+
 	useEffect(() => {
 		const fetchUserName = async () => {
 			if (auth.currentUser) {
 				const userDocRef = doc(db, "users", auth.currentUser.uid);
 				const userDoc = await getDoc(userDocRef);
-
 				if (userDoc.exists()) {
 					 setUserName(userDoc.data().name);
 				} else {
@@ -51,8 +52,22 @@ function PostRecipe() {
 		        }
 	};
 
+	const TopRightButton = styled(Button)(
+		{
+			position: "absolute", 
+			top: "20px", 
+			right: "20px", 
+			borderRadius: "30px",
+			padding: "10px 30px",
+			backgroundColor: "#455763", 
+			color: "#fff", 
+			"&:hover": {backgroundColor: "#D3DADC",},
+		}
+	);
+
 	return (
 		<div className="App">
+
 		<Container 
 		style={{ 
 			display: "flex",
@@ -62,6 +77,19 @@ function PostRecipe() {
 			height: "100vh"
 		      }}
 		>
+
+		<Card 
+		sx={{ 
+			minWidth: 400, 
+			width: "70%",
+			maxWidth: 500,
+			boxShadow: 3, 
+			p: 2, 
+			background: "#ededed"
+		   }}
+		>
+		<CardContent>
+
 		<Typography variant="h4" gutterBottom>
 		 Post a recpie
 		</Typography>
@@ -88,7 +116,7 @@ function PostRecipe() {
 		value={ingredients}
 		onChange={(e) => setIngredients(e.target.value)}
 		multiline
-		rows={10}
+		rows={8}
 		required
 		/>
 
@@ -101,7 +129,7 @@ function PostRecipe() {
 		value={instructions}
 		onChange={(e) => setInstructions(e.target.value)}
 		multiline
-		rows={10}
+		rows={8}
 		required
 		/>
 
@@ -111,44 +139,31 @@ function PostRecipe() {
 		</Typography>
 		)}
 
-		<Grid container spacing={2} justifyContent="space-between">
-
-		<Grid item xs={6}>
 		<Button
 		variant="contained"
 		sx={{
 			borderRadius: "30px",
 			padding: "10px 30px",
-			background: "#727F91",
-			"&:hover":{backgroundColor: "#ACB4BD"}
+			background: "#455763",
+			"&:hover":{backgroundColor: "#D3DADC"}
 		   }}
 		type="submit"
 		>
 		 Submit
 		</Button>
-		</Grid>
 
-		<Grid item xs={6} container justifyContent="flex-end">
-		
-		<Link to="/Profile" style={{ textDecoration: "none" }}>
-		<Button 
-		variant="contained" 
-		sx={{
-			borderRadius: "30px",
-			padding: "10px 30px",
-			background: "#727F91",
-			"&:hover":{backgroundColor: "#ACB4BD"}
-		   }}
-		type="submit"
+		<TopRightButton
+		variant="contained"
+		component={Link}
+		to="/Profile"
+		startIcon={<HomeIcon />}
 		>
 		 Profile
-                </Button>
-		</Link>
-		</Grid>
+		</TopRightButton>
 
-		</Grid>
-		
 		</form>
+		</CardContent>
+		</Card>
 		</Container>
 		</div>
 	);

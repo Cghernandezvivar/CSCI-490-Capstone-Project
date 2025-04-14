@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Button } from '@mui/material';
-import app from "./firebaseConfig";
+import app from './firebaseConfig';
 import logo from './Cover.jpeg';
 
 
@@ -53,11 +53,11 @@ function Home() {
 		<h5
 		style={{
 			marginBottom: "30px",
-			color: "#888A8E",
+			color: "#555555",
 			textAlign: "center",
 		      }}
 		>
-		 This is an Online Cookbook
+		 This is an Online Cookbook where you can add your recipes and share them with people that you know.
 		</h5>
 
 		<Grid container spacing={2} justifyContent="center">
@@ -69,8 +69,8 @@ function Home() {
 		sx={{ 
 			borderRadius: "30px",
 			padding: "10px 30px",
-			background: "#727F91",
-			"&:hover":{backgroundColor: "#ACB4BD"}
+			background: "#455763",
+			"&:hover":{backgroundColor: "#D3DADC"}
 		   }}
 		type="submit"
 		>
@@ -86,8 +86,8 @@ function Home() {
 		sx={{
 			borderRadius: "30px",
 			padding: "10px 30px",
-			background: "#727F91",
-			"&:hover":{backgroundColor: "#ACB4BD"}
+			background: "#455763",
+			"&:hover":{backgroundColor: "#D3DADC"}
 	           }}
 		>
 		 Login
