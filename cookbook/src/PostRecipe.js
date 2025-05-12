@@ -2,14 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Button, TextField, Container, Typography, styled, Card, CardContent } from '@mui/material';
 import { Link } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
-import { db, auth } from './firebaseConfig';
+import { db, auth, storage } from './firebaseConfig';
 import { collection, addDoc, doc, getDoc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 function PostRecipe() {
 	const [foodname, setFoodName] = useState(""); // Food Name
 	const [ingredients, setIngredients] = useState(""); // Ingredients
 	const [instructions, setInstructions] = useState(""); // Instructions
 	const [userName, setUserName] = useState("Anonymous"); // Users Name
+	const [image, setImage] = useState(""); // Image
 	const [error, setError] = useState("");
 
 
@@ -34,12 +36,21 @@ function PostRecipe() {
 		setError("");
 
 	try { 
+		let imageURL = "";
+		if( image ) {
+			const imageRef = ref(storage, `recipeImages/${Date.now()}_${image.name}`);
+			const snapshot = await uploadBytes(imageRef, image);
+			imageURL = await getDownloadURL(snapshot.ref);
+			console.log("Image URL:", imageURL);
+		}
+		
 		const docRef = await addDoc(collection(db, "recipes"), { 
 			foodname,
 			ingredients,
 			instructions,
 			createdAt: new Date(),
-			userName: userName,
+			userName,
+			imageURL,
 		});
 
 		console.log("Document written with ID:", docRef.id);
@@ -47,8 +58,9 @@ function PostRecipe() {
 		            setFoodName("");
 			    setIngredients("");
 		            setInstructions("");
+			    setImage(null);
 	} catch (error) {
-		console.error("Error adding document:", error);
+		console.error("Error adding document:", error.message, error.code, error);
 		            alert("Error submitting recipe.");
 		        }
 	};
@@ -79,6 +91,7 @@ function PostRecipe() {
 		      }}
 		>
 
+		{/*Card Style*/}
 		<Card 
 		sx={{ 
 			minWidth: 400, 
@@ -91,12 +104,14 @@ function PostRecipe() {
 		>
 		<CardContent>
 
+		{/*Title*/}
 		<Typography variant="h4" gutterBottom>
 		 Post a recpie
 		</Typography>
 
 		<form onSubmit={handleSubmit}>
 
+		{/*Name Input*/}
 		<TextField
 		label="Food Name:"
 		type="text"
@@ -108,6 +123,7 @@ function PostRecipe() {
 		required
 		/>
 
+		{/*Ingredients Input*/}
 		<TextField
 		label="Ingredients:"
 		type="text"
@@ -121,6 +137,7 @@ function PostRecipe() {
 		required
 		/>
 
+		{/*Instruction Input*/}
 		<TextField
 		label="Instructions:"
 		type="text"
@@ -133,13 +150,26 @@ function PostRecipe() {
 		rows={8}
 		required
 		/>
+		
+		{/*Image Input*/}
+		<input
+		type="file"
+		accept="image/*"
+		onChange={(e) => setImage(e.target.files[0])}
+		style={{
+			marginTop: "15px",
+			marginBottom: "15px"
+		      }}
+		/>
 
+		{/*Errors*/}
 		{error && (
 		<Typography color="error" variant="body2" style={{ margin: "10px" }}>
 		{error}
 		</Typography>
 		)}		
 
+		{/*Submit Button*/}
 		<Button
 		variant="contained"
 		sx={{
@@ -153,6 +183,7 @@ function PostRecipe() {
 		 Submit
 		</Button>
 
+		{/*Back to Profile Button*/}
 		<TopRightButton
 		variant="contained"
 		component={Link}

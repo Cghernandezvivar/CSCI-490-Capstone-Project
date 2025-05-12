@@ -50,6 +50,7 @@ function Login() {
 			}}
 			>
 
+			{/*Card Style*/}
 			<Card
 			sx={{
 				minWidth: 400,
@@ -61,13 +62,15 @@ function Login() {
 			   }}
 			>
 			<CardContent>
-
+			
+			{/*Title*/}
 			<Typography variant="h4" gutterBottom>
 	                 Login to Your Account
 			</Typography>
 
 			<form onSubmit={handleLogin} style={{ width: "100%", maxWidth: "400px" }}>
 
+			{/*Email Input*/}
 			<TextField
 			label="Email"
 	          	variant="outlined"
@@ -78,6 +81,7 @@ function Login() {
 			required
 			/>
 
+			{/*Password Input*/}
 			<TextField
 			label="Password"
 	          	type="password"
@@ -89,6 +93,7 @@ function Login() {
 			required
 		        />
 
+			{/*Errors*/}
 			{error && (
 		        <Typography color="error" variant="body2" style={{ margin: "10px" }}>
 				{error}
@@ -99,6 +104,7 @@ function Login() {
 
 			<Grid item xs={6}>
 
+			{/*link to Signup Page*/}
 			<Typography variant="body2" style={{ marginTop: "10px" }}>
 			 Sign up instead{' '}
 			<Link to="/CreateAccount" style={{ textDecoration: "underline", color: "blue" }}>
@@ -107,6 +113,7 @@ function Login() {
 			</Typography>
 			</Grid>
 
+			{/*Login Button*/}
 			<Grid item xs={6} container justifyContent="flex-end">
 			<Button 
 			variant="contained" 
@@ -122,6 +129,7 @@ function Login() {
 	                </Button>
 			</Grid>
 
+			{/*Back Button*/}
 			<TopRightButton
 			variant="contained"
 			component={Link}

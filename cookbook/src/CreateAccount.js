@@ -62,7 +62,8 @@ export default function CreateAccount() {
 			height: "100vh"
 		      }}
 		>
-		
+
+		{/*Card Style*/}
 		<Card
 		sx={{
 			minWidth: 400,
@@ -75,12 +76,14 @@ export default function CreateAccount() {
 		>
 		<CardContent>
 
+		{/*Title*/}
 		<Typography variant="h4" gutterBottom>
 		 Create your Online Cookbook Account
 		</Typography>
 
 		<form onSubmit={ handleCreateAccount } style={{ width: "100%", maxWidth: "400px" }}>
 
+		{/*Name Input*/}
 		<TextField
 		label="Name"
 		type="text"
@@ -92,6 +95,7 @@ export default function CreateAccount() {
 		required 
 		/>
 
+		 {/*Email Input*/}
 		<TextField
 		label="Email"
 		type="email"
@@ -103,6 +107,7 @@ export default function CreateAccount() {
 		required
 		/>
 
+		 {/*Password Input*/}
 		<TextField
 		label="Password"
 		type="password"
@@ -114,18 +119,21 @@ export default function CreateAccount() {
 		required
 		/>
 
+		{/*Errors*/}
 		{error && (
 		<Typography color="error" variant="body2" style={{ margin: "10px" }}>
 		 {error}
 		</Typography>
 		)}
 
+		{/*Password Requirments*/}
 		<Typography variant="body2" style={{ margin: "10px" }}>
 		 Use 6 or more numbers
 		</Typography>
 
 		<Grid container spacing={2} justifyContent="space-between">
 
+		{/*Link to Login Page*/}
 		<Grid item xs={6}>
 		<Typography variant="body2" style={{ marginTop: "10px" }}>
 		 Sign in instead{' '}
@@ -135,6 +143,7 @@ export default function CreateAccount() {
 		</Typography>
 		</Grid>
 
+		{/*Submit Button*/}
 		<Grid item xs={6} container justifyContent="flex-end">
 		<Button 
 		variant="contained" 
@@ -150,6 +159,7 @@ export default function CreateAccount() {
 		</Button>
 		</Grid>
 
+		{/*Back Button*/}
 		<TopRightButton
 		variant="contained"
 		component={Link}

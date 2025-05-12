@@ -117,14 +117,36 @@ function RecipeDetail() {
 			    	}}
 			    >
 			    <CardContent>
-			   
+			  
+			    {/*Recipe Name*/}
 			    <Typography variant="h4" gutterBottom>
-			    {recipe.foodName}
+			    {recipe.foodname || "Unkown"}
 			    </Typography>
 
+			    {/*Users Name*/}
 			    <Typography variant="subtitle1" gutterBottom>
 			    By: {recipe.userName || "Anonymous"}
 			    </Typography>
+
+			    {/*Time Posted*/}
+			    <Typography variant="subtitle1" gutterBottom>
+			    {recipe.createdAt ? recipe.createdAt.toDate().toLocaleDateString() : "Unknown"}
+			    </Typography>
+
+			    {/*Image displayed*/}
+			    {recipe.imageURL && (
+				    <img
+				    src={recipe.imageURL}
+				    alt="Recipe"
+				    style={{
+					    width:"100%",
+					    maxHeight:"400px",
+					    objectFit:"cover",
+				    	    marginTop: "20px",
+					    borderRadius: "10px"
+				    }}
+				    />
+			    )}
 
 			    <Divider 
 			    sx={{ 
@@ -132,6 +154,7 @@ function RecipeDetail() {
 			    	}}
 			    />
 			    
+			    {/*Ingredients*/}
 			    <Typography variant="h6">
 			    Ingredients:
 			    </Typography>
@@ -157,6 +180,7 @@ function RecipeDetail() {
 			    	}}
 			    />
 
+			    {/*Instructions*/}
 			    <Typography variant="h6">
 			    Instructions:
 			    </Typography>
@@ -179,17 +203,22 @@ function RecipeDetail() {
 			    	}}
 			    />
 
+			    {/*Comments*/}
 			    <Typography variant="h6">
 			    Comments: 
 			    </Typography>
 			    <List>
 			    {comments.map((comment, index) => (
 				    <ListItem key={index} alignItems="flex-start">
-				    <ListItemText primary={comment.comment} secondary={comment.userName|| "Anonymous"}/>
+				    <ListItemText 
+				    primary={comment.comment} 
+				    secondary={`${comment.timestamp ? new Date(comment.timestamp.seconds * 1000).toLocaleString():""} by ${comment.userName|| "Anonymous"}`}				    
+				    />
 				    </ListItem>
 			    ))}
 			    </List>
 
+			    {/*Comment Input*/}
 			    <TextField
 			    label="Add a comment"
 			    variant="outlined"
@@ -200,7 +229,17 @@ function RecipeDetail() {
 			    rows={3}
 			    style={{ marinTop: 2, marginBottom: 1}}
 			    />
-			    <Button variant="contained" color="primary" onClick={handleAddComment}>
+			    {/*Post Comment Buttonn*/}
+			    <Button 
+			    variant="contained" 
+			    sx={{
+				    borderRadius: "30px",
+				    padding: "10px 30px",
+				    background: "#455763",
+				   "&:hover":{backgroundColor: "#D3DADC"}
+			        }}
+			    onClick={handleAddComment}
+			    >
 			    Post Comment
 			    </Button>
 			   </CardContent>
@@ -210,6 +249,7 @@ function RecipeDetail() {
 			    <p>Loading recipe details...</p>
 		    )}
 
+		    {/*Back to posted Recipe Page Button*/}
 		    <TopRightButton
 		    variant="contained"
 		    component={Link}

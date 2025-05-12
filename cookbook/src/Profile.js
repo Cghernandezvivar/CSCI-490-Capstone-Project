@@ -38,7 +38,7 @@ function Profile() {
 			marginTop: "20px"
 		 }}
 		 >
-
+		{/*Button to Post Recipe*/}
 		<Link to="/PostRecipe" style={{ textDecoration: "none" }}>
 		<Button 
 		variant="contained" 
@@ -66,6 +66,7 @@ function Profile() {
 		</Button>
 		</Link>
 
+		{/*Button to Look at food*/}
 		<Link to="/PostedRecipe" style={{ textDecoration: "none" }}>
                 <Button 
 		variant="contained" 
@@ -93,6 +94,7 @@ function Profile() {
                 </Button>
 		</Link>
 
+		{/*Button to Messages*/}
 		<Link to="/Messages" style={{ textDecoration: "none" }}>
 		<Button 
 		variant="contained" 
@@ -121,6 +123,7 @@ function Profile() {
 		</Link>
 		</Box>
 	
+		{/*Button to Logout*/}
 		<TopRightButton
 		variant="contained"
 		component={Link}

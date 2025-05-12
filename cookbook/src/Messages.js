@@ -9,8 +9,8 @@ import { getAuth } from 'firebase/auth';
 function Messages() {
 	const [accounts, setAccounts] = useState([]); // Accounts
 	const navigate = useNavigate();
-	const auth = getAuth();
-	const currentUser = auth.currentUser;
+	const auth = getAuth(); // Auth
+	const currentUser = auth.currentUser; // Current User
 
 	 useEffect(() => {
 		 const fetchAccounts = async () => {
@@ -46,6 +46,7 @@ function Messages() {
 	return (
 		<div className="App">
 
+		{/*Title*/}
 		<h1>
 		Messages
 		</h1>
@@ -60,7 +61,7 @@ function Messages() {
 			paddingTop: "20px"
 		      }}
 		>
-		
+		{/*Button Style*/}
 		{accounts.map((account, index) => (
 			<Typography
 			key={account.id}
@@ -81,6 +82,7 @@ function Messages() {
 			</Typography>
 		))}
 
+		{/*Back to Profile BUtton*/}
 		<TopRightButton 
 		variant="contained" 
 		component={Link} 

@@ -11,10 +11,11 @@ function MessageRoom() {
 	const [user, setUser] = useState(null); // User
 	const [message, setMessage] = useState(""); // Message
 	const [messages, setMessages] = useState([]); // Messages
-	const auth = getAuth();
-	const currentUser = auth.currentUser;
+	const auth = getAuth(); // Auth
+	const currentUser = auth.currentUser; // Current User
 
 	useEffect(() => {
+
 		const fetchUser = async () => {
 			try { 	
 				const querySnapshot = await getDocs(collection(db, "users"));
@@ -27,21 +28,26 @@ function MessageRoom() {
 		};
 		fetchUser();
 	}, [userId]);
-
-
 	
 	useEffect(() => {
-		const messagesRef = collection(db, "messages");
-		const q = query(
-			messagesRef,
-			where("from", "in", [currentUser?.uid, userId]),
-			where("to", "in", [currentUser?.uid, userId]),
-			orderBy("timestamp", "asc")
 
+		if(!currentUser?.uid || !userId) {
+			return;
+		}
+		const messagesRef = collection(db, "messages");
+		const q = query( 
+			messagesRef, 
+			where("from", "in", [currentUser?.uid, userId]), 
+			where("to", "in", [currentUser?.uid, userId]), 
+			orderBy("timestamp", "asc")
 		);
+
 		const unsubscribe = onSnapshot(q, (querySnapshot) => {
-			const fetchedMessages = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-			setMessages(fetchedMessages);
+		const fetchedMessages = querySnapshot.docs.map(doc => ({ 
+			id: doc.id, 
+			...doc.data() 
+		}));
+		setMessages(fetchedMessages);
 		});
 		
 		return () => unsubscribe();
@@ -87,6 +93,7 @@ function MessageRoom() {
 	return (
 		<div className="App">
 
+		{/*Title*/}
 		<h1>Message with {user ? user.name : "Loading..."}</h1>
 
 		<Container
@@ -100,10 +107,6 @@ function MessageRoom() {
 		      }}
 		>
 
-		{/*
-		<h1>Message with {user ? user.name : "Loading..."}</h1>
-		*/}
-		
 		<div
 		style={{
 			width: "100%",
@@ -116,6 +119,7 @@ function MessageRoom() {
 			marginBottom: "10px"
 		      }}
 		>
+		
 		{messages.length > 0 ? (
 		    messages.map((msg) => (
 		        <p key={msg.id} style={{ textAlign: msg.from === currentUser.uid ? "right" : "left" }}>
@@ -129,6 +133,7 @@ function MessageRoom() {
 
 		<form onSubmit={handleMessageChange} style={{ width: "100%", maxWidth: "400px" }}>
 
+		{/*Message Input*/}
 		<TextField
 		label="Message"
 		type="text"
@@ -140,6 +145,7 @@ function MessageRoom() {
 		required
 		/>
 
+		{/*Send Button*/}
 		<Button 
 		variant="contained" 
 		sx={{
@@ -153,6 +159,7 @@ function MessageRoom() {
 		 Send Message
 		</Button>
 
+		{/*Back to Messages Button*/}
 		<TopRightButton
 		variant="contained"
 		component={Link}

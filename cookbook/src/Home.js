@@ -38,6 +38,7 @@ function Home() {
 		      }}
 		>
 
+		{/*Title of website*/}
 		<h1
 		style={{
 			marginBottom: "20px",
@@ -50,6 +51,7 @@ function Home() {
 		 Welcome to my Online Cookbook
 		</h1>
 
+		{/*Website description*/}
 		<h5
 		style={{
 			marginBottom: "30px",
@@ -62,6 +64,7 @@ function Home() {
 
 		<Grid container spacing={2} justifyContent="center">
 
+		{/*Signup Button*/}
 		<Grid item>
 		<Link to="/CreateAccount" style={{ textDecoration: "none" }}>
 		<Button 
@@ -79,6 +82,7 @@ function Home() {
 		</Link>
 		</Grid>
 
+		{/*Login Button*/}
 		<Grid item>
 		<Link to="/Login" style={{ textDecoration: "none" }}>
 		<Button
@@ -112,6 +116,7 @@ function Home() {
 		      }}
 		>
 
+		{/*IMAGE on right side */}
 		<img
 		src={logo}
 		alt="CoverPic"
